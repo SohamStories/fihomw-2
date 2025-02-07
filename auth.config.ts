@@ -19,6 +19,7 @@ export default {
         Credentials({
 
             async authorize(credentials) {
+
                 const validatedData = LoginSchema.safeParse(credentials);
 
                 if(!validatedData.success) return null;
@@ -30,6 +31,8 @@ export default {
                         email: email,
                     }
                 });
+
+                
                 if(!user || !user.password || !user.email ){
                     return null;
                 }

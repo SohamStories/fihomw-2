@@ -41,7 +41,7 @@ const CardWrapper = ({
 
         <CardFooter>
             <BackButton label={backButtonlabel} href={backButtonhref}/>
-
+{showSocial}
         </CardFooter>
 
 

@@ -31,3 +31,9 @@ export const LoginSchema = z.object ({
     })
 
 })
+
+export const AccountTypeSchema = z.object({
+    name: z.string().min(1,{
+        message:"Please Enter the Name of an account"
+    })
+})

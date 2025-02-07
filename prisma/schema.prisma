@@ -21,6 +21,7 @@ model User {
   password       String?
   image         String?
   accounts      Account[]
+  accountype    AccountType[]
 
  
   @@map("users")
@@ -45,6 +46,15 @@ model Account {
  
   @@unique([provider, providerAccountId])
   @@map("accounts")
+}
+
+model AccountType {
+  id                 String @id @default(cuid())
+  userId             String  @map("user_id")
+  name               String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade )
+   @@map("accountypes")
 }
  
 

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -23,6 +22,7 @@ import { FormSuccess } from "./form-success";
 import { FormError } from "./form-error";
 import { Button } from "../ui/button";
 import GoogleLogin from "./google-login";
+
 
 const RegisterForm = () => {
 
@@ -66,7 +66,7 @@ const RegisterForm = () => {
         headerlabel="Create an account "
         title="Register"
         backButtonhref="/auth/login"
-        backButtonlabel="Already have an account"
+        backButtonlabel="Already have an account?"
         showSocial
         >
 
@@ -149,3 +149,4 @@ const RegisterForm = () => {
 };
 
 export default RegisterForm;
+

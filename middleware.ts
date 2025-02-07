@@ -10,7 +10,7 @@ export default auth(async (req)=> {
     const url= "http://localhost:3000";
     const isPrivateRoute = privateRoutes.includes(nextUrl.pathname);
     const isAuthRoute = nextUrl.pathname.includes("/auth");
-    const isApiRoute = nextUrl.pathname.includes("/api")
+    const isApiRoute = nextUrl.pathname.includes("/api");
 
     if(isApiRoute) {
         return;
@@ -20,7 +20,7 @@ export default auth(async (req)=> {
         return Response.redirect(`${url}/dashboard`);
     }
     if(isAuthRoute && !isLoggedIn) {
-        return 
+        return  ;
     }
     if(!isLoggedIn && isPrivateRoute){
         return Response.redirect(`${url}/auth/login`)
