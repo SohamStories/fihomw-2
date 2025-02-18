@@ -11,7 +11,7 @@ export const getUserbyId = async (id: string) => {
         return user;
     } catch (error) {
 
-        console.log(error)
+    
 
         return null
         

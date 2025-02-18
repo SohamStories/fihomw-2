@@ -22,8 +22,8 @@ model User {
   image         String?
   accounts      Account[]
   accountype    AccountType[]
-
- 
+  categories    Categories[]
+  transactions  Transaction[]
   @@map("users")
 }
  
@@ -52,10 +52,37 @@ model AccountType {
   id                 String @id @default(cuid())
   userId             String  @map("user_id")
   name               String
-
+  
+  transactions  Transaction[]
   user User @relation(fields: [userId], references: [id], onDelete: Cascade )
    @@map("accountypes")
 }
  
 
- 
+ model Categories {
+  id               String @id @default( cuid())
+  userId           String @map("user_id")
+  name             String
+  transactions  Transaction[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("categories")
+ }
+
+model Transaction {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  accountypeId   String   @map("accountype_id")
+  categoryId  String?  @map("category_id")
+  amount      Int      // Changed from Decimal to Int
+  payee       String
+  description String?
+  date        DateTime @default(now())
+
+  // Relationships
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountypes   AccountType   @relation(fields: [accountypeId], references: [id], onDelete: Cascade)
+  categories     Categories? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@map("transactions")
+}

@@ -14,6 +14,7 @@ import CardWrapper from "./card-wrapper";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // ✅ Import useRouter
 import { z } from "zod";
 import { LoginSchema } from "@/schemas";
 import { Input } from "../ui/input";
@@ -26,7 +27,7 @@ import { login } from "@/actions/login";
 const LoginForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-
+    const router = useRouter(); // ✅ Initialize router for redirection
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         mode: "onSubmit",
@@ -37,27 +38,26 @@ const LoginForm = () => {
         },
     });
 
-  const onSubmit = async (data: z.infer<typeof LoginSchema>)  => {
-    setLoading(true);
-    login(data).then((res) => {
-        if(res?.error) {
-            setError(res?.error);
+    const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+        setLoading(true);
+        setError("");
+
+        const res = await login(data); // ✅ Wait for login result
+
+        if (res?.error) {
+            setError(res.error);
             setLoading(false);
-        } else {
-            setError("");
-                setLoading(false);
-            
+        } else if (res?.redirectUrl) {
+            router.push(res.redirectUrl); // ✅ Redirect using the returned URL
         }
-    });
-  };
+    };
 
     return (
-        
         <CardWrapper
             headerlabel="Login"
             title="Login to your account"
             backButtonhref="/auth/register"
-            backButtonlabel="Don't have an account?"
+            backButtonlabel="Don't have an account ?"
             showSocial
         >
             <Form {...form}>
@@ -67,18 +67,18 @@ const LoginForm = () => {
                             control={form.control}
                             name="email"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="font-semibold">Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            className="text-slate-500 font-normal"
-                                            {...field}
-                                            placeholder="johndoe@gmail.com"
-                                            type="email"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                            <FormItem>
+                                <FormLabel className="font-semibold">Email</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        className="text-slate-500 font-normal"
+                                        {...field}
+                                        placeholder="johndoe@gmail.com"
+                                        type="email"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                             )}
                         />
 
@@ -86,18 +86,18 @@ const LoginForm = () => {
                             control={form.control}
                             name="password"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="font-semibold">Password</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            className="text-slate-500 font-normal"
-                                            {...field}
-                                            placeholder="******"
-                                            type="password"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                            <FormItem>
+                                <FormLabel className="font-semibold">Password</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        className="text-slate-500 font-normal"
+                                        {...field}
+                                        placeholder="******"
+                                        type="password"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                             )}
                         />
                     </div>

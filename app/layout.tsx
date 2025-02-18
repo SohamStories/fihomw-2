@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { QueryProviders } from "@/provider/query-provider";
-import { SheetProvider } from "@/provider/sheet-provider";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,11 +32,12 @@ export default function RootLayout({
 
 
       >
-        <QueryProviders>
 
+        <QueryProviders>
         <SessionProvider>
-        
+
         {children}
+
       </SessionProvider>
         </QueryProviders>
       </body>

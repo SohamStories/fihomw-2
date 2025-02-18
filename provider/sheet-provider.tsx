@@ -1,16 +1,32 @@
 "use client";
 
+import { EditAccountSheet } from "@/features/accounts/components/edit-accountsheet";
 import { NewAccountSheet } from "@/features/accounts/components/new-account-sheet";
+
+import { EditCategorySheet } from "@/features/categories/components/editcategorysheet";
+
+import { NewCategorySheet } from "@/features/categories/components/new-category-sheet";
+
+
 import { useEffect, useState } from "react";
 
 export const SheetProvider = () => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        setIsMounted(true);
+      setIsMounted(true);
     }, []);
+  
+    if (!isMounted) {
+      return null;
+    }
+    return (
+      <div>
+        <NewAccountSheet/>
+        <EditAccountSheet/>
 
-    if (!isMounted) return null; // Avoid rendering on the server
-
-    return <NewAccountSheet />;
+<NewCategorySheet/>
+        <EditCategorySheet/>
+      </div>
+    );
 };
