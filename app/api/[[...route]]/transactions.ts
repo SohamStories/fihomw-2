@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { Categoriesschema, TransactionSchema } from "@/schemas";
 import { zValidator } from "@hono/zod-validator";
 import { cors } from "hono/cors";
-import { z } from "zod";
+import { string, z } from "zod";
 import  { parse , subDays } from "date-fns"
 const prisma = new PrismaClient();
 const app = new Hono()
@@ -16,22 +16,26 @@ const app = new Hono()
 }))
 
 
-.get("/",
-  zValidator("query", z.object({
-    from: z.string().optional(),
-    to: z.string().optional(),
-    accountypeId: z.string().optional(),
-  })),
-  
+.get(
+  "/",
+  zValidator(
+    "query",
+    z.object({
+      from: z.string().optional(),
+      to: z.string().optional(),
+      accountypeId: z.string().optional(),
+    })
+  ),
   async (c) => {
     const session = await auth();
     const { from, to, accountypeId } = c.req.valid("query");
 
+    // Log the session details
+    console.log("🔐 Session:", session);
+
     // Check if the user is authenticated
     if (!session?.user?.id) {
-      return c.json({
-        error: "Unauthorized",
-      }, 401);
+      return c.json({ error: "Unauthorized" }, 401);
     }
 
     const defaultTo = new Date();
@@ -40,20 +44,25 @@ const app = new Hono()
     const startDate = from ? parse(from, "yyyy-MM-dd", new Date()) : defaultFrom;
     const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
 
-    // Fetch user data from the database
+    // Log filter values
+    console.log("📅 Date Range:", { from: startDate, to: endDate });
+    console.log("📥 Query accountypeId:", accountypeId);
+    console.log("👤 Filtering for userId:", session.user.id);
+
     const data = await prisma.transaction.findMany({
       where: {
         userId: session.user.id,
-        accountypeId,
+        ...(accountypeId && { accountypeId }), // only filter by accountypeId if provided
         date: {
-          gte: startDate, // Transactions on or after startDate
-          lte: endDate,   // Transactions on or before endDate
-          
+          gte: startDate,
+          lte: endDate,
         },
       },
-      orderBy: [{
-        date: "desc"
-      }],
+      orderBy: [
+        {
+          date: "desc",
+        },
+      ],
       select: {
         id: true,
         date: true,
@@ -67,9 +76,13 @@ const app = new Hono()
       },
     });
 
+    // Log final fetched transactions
+    console.log("✅ Transactions fetched:", data.length, data);
+
     return c.json({ data });
   }
 )
+
 
 .get("/:id", 
   zValidator("param",z.object({
@@ -156,6 +169,7 @@ const userId =session?.user?.id
       data: {
       ...values,
       userId: userId,
+      amount: Number(values.amount)
       },
     });
     
@@ -166,6 +180,9 @@ const userId =session?.user?.id
     );
     
   })
+
+ 
+
 
   .post("/bulk-delete",
     zValidator("json", z.object({
@@ -223,7 +240,10 @@ const userId =session?.user?.id
             accountypes: { userId: session.user.id },
            },
 
-          data: values,
+           data: {
+            ...values,
+            amount: Number(values.amount)
+            },
         });
   
         return c.json({ updatedTransactionType }, 200);

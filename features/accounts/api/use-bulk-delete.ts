@@ -39,6 +39,7 @@ export const usebulkdeleteAccounts = () => {
 
       // ✅ Refetch updated data after deletion
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error) => {
       console.error("Failed to delete account:", error);

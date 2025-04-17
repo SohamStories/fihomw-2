@@ -1,6 +1,7 @@
 import { Header } from "@/components/header";
 import { SheetProvider } from "@/provider/sheet-provider";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { Toaster } from "sonner";
 
@@ -18,7 +19,10 @@ export default function RootLayout({
 <SheetProvider/>
 <Header/>
         <Toaster/>
-        {children}
+
+<Suspense fallback={<div className="p-6">Loading transactions page...</div>}>
+      {children}
+    </Suspense>
     
   </>
   

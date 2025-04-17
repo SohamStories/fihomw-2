@@ -39,6 +39,7 @@ export const usebulkdeleteCategories = () => {
 
       // ✅ Refetch updated data after deletion
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error) => {
       console.error("Failed to delete category:", error);

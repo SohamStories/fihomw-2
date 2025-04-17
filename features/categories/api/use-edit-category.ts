@@ -30,6 +30,8 @@ export const useEditCategories = () => {
       });
       queryClient.invalidateQueries({ queryKey: ["categories" , id] });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+     
     },
     onError: (error) => {
       console.error("Failed to edit categories:", error);

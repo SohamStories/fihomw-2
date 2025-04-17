@@ -3,16 +3,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "@/lib/hono";
 import { toast } from "sonner";
 
-type ResponseType = InferResponseType<typeof client.api.accounts["bulk-delete"]["$post"]>;
-type RequestType = InferRequestType<typeof client.api.accounts["bulk-delete"]["$post"]>["json"];
+type ResponseType = InferResponseType<typeof client.api.transactions["bulk-delete"]["$post"]>;
+type RequestType = InferRequestType<typeof client.api.transactions["bulk-delete"]["$post"]>["json"];
 
-export const usebulkdeleteAccounts = () => {
+export const usebulkdeleteTransactions = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (userData) => {
       try {
-        const response = await fetch("http://localhost:3000/api/accounts/bulk-delete", {
+        const response = await fetch("http://localhost:3000/api/transactions/bulk-delete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userData),
@@ -25,7 +25,7 @@ export const usebulkdeleteAccounts = () => {
        
 
         if (!response.ok) {
-          throw new Error(`Failed to delete account: ${responseBody}`);
+          throw new Error(`Failed to delete Transactions: ${responseBody}`);
         }
 
         return JSON.parse(responseBody); // ✅ Parse the response manually
@@ -35,14 +35,15 @@ export const usebulkdeleteAccounts = () => {
       }
     },
     onSuccess: () => {
-      toast.success("Account Deleted");
+      toast.success("Transaction Deleted");
 
       // ✅ Refetch updated data after deletion
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
     },
     onError: (error) => {
-      console.error("Failed to delete account:", error);
-      toast.error(error.message || "Failed to delete account");
+      console.error("Failed to delete transaction:", error);
+      toast.error(error.message || "Failed to delete transaction");
     },
   });
 

@@ -31,6 +31,8 @@ export const useDeleteCategories = () => {
 
       // Invalidate only the list, not the deleted category
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+ 
 
       // Close modal if it's open
       onClose();

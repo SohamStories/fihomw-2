@@ -49,9 +49,9 @@ export const Categoriesschema = z.object({
 export const TransactionSchema = z.object({
   
   date: z.string().datetime(), // ISO date-time string
-  amount: z.number().positive(), // Positive number for transaction amount
+  amount: z.string(), // Positive number for transaction amount
   description: z.string().optional(), // Optional description
   accountypeId: z.string(), // Account type ID (assumed to be a string)
-  categoryId: z.string(), // Category ID (assumed to be a string)
+  categoryId: z.string().optional(), // Category ID (assumed to be a string)
   payee: z.string(), // Optional payee name
 });

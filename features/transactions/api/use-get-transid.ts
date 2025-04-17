@@ -1,19 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetAccount = (id?: string) => {
+export const useGetTransaction = (id?: string) => {
     return useQuery({
         enabled: !!id,
-        queryKey: ["accounts", id],
+        queryKey: ["transactions", id],
         queryFn: async () => {
          
 
-            const response = await fetch(`http://localhost:3000/api/accounts/${id}`, {
+            const response = await fetch(`http://localhost:3000/api/transactions/${id}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
 
             if (!response.ok) {
-                throw new Error("Failed to fetch account");
+                throw new Error("Failed to fetch transactions");
             }
 
             const json = await response.json();

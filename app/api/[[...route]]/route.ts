@@ -3,12 +3,13 @@ import { handle } from 'hono/vercel'
 import accounts from "./account"
 import categories from "./categories"
 import transactions from './transactions'
-
+import summary from './summary'
 
 const app = new Hono().basePath("/api")
 
 
 const routes = app
+.route("/summary", summary)
    .route("/accounts", accounts)
    .route("/categories",categories)
    .route("/transactions",transactions);

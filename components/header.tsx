@@ -1,7 +1,7 @@
 
 import { Headerlogo } from "./header-logo"
 import { Navigation } from "./navigation"
-
+import Filters from "./filters"
 import { Userbutton } from "./user-button"
 import WelcomeMsg from "./welcome-msg"
 
@@ -22,6 +22,7 @@ export const Header = () => {
                 </div>
 
                 <WelcomeMsg/>
+                <Filters />
             </div>
         </header>
     )

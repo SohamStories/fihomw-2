@@ -30,6 +30,8 @@ export const useDeleteAccount = () => {
 
       // Invalidate only the list, not the deleted account
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    
 
       // Close modal if it's open
       onClose();
